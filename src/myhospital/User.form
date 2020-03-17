@@ -63,13 +63,13 @@
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="jLabel2" min="-2" pref="48" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
-                                  <Component id="name" min="-2" pref="375" max="-2" attributes="0"/>
+                                  <Component id="nameField" min="-2" pref="375" max="-2" attributes="0"/>
                               </Group>
                               <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
                                   <Group type="102" alignment="0" attributes="0">
                                       <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="username" min="-2" pref="375" max="-2" attributes="0"/>
+                                      <Component id="usernameField" min="-2" pref="375" max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="102" alignment="0" attributes="0">
                                       <Group type="103" groupAlignment="0" attributes="0">
@@ -78,9 +78,9 @@
                                       </Group>
                                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="password" max="32767" attributes="0"/>
+                                          <Component id="passwordField" max="32767" attributes="0"/>
                                           <Group type="102" attributes="0">
-                                              <Component id="role" min="-2" pref="250" max="-2" attributes="0"/>
+                                              <Component id="roleField" min="-2" pref="250" max="-2" attributes="0"/>
                                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                                           </Group>
                                       </Group>
@@ -108,22 +108,22 @@
                   <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="name" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="nameField" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel6" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="username" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="usernameField" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel7" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="password" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="passwordField" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="role" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="roleField" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
@@ -191,22 +191,13 @@
             <Property name="text" type="java.lang.String" value="User Form"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="name">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="jTextField1"/>
-          </Properties>
+        <Component class="javax.swing.JTextField" name="nameField">
         </Component>
-        <Component class="javax.swing.JTextField" name="username">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="jTextField1"/>
-          </Properties>
+        <Component class="javax.swing.JTextField" name="usernameField">
         </Component>
-        <Component class="javax.swing.JPasswordField" name="password">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="jPasswordField1"/>
-          </Properties>
+        <Component class="javax.swing.JPasswordField" name="passwordField">
         </Component>
-        <Component class="javax.swing.JComboBox" name="role">
+        <Component class="javax.swing.JComboBox" name="roleField">
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
               <StringArray count="4">

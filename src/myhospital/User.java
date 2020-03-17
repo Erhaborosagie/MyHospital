@@ -5,6 +5,14 @@
  */
 package myhospital;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+
 
 /**
  *
@@ -17,6 +25,23 @@ public class User extends javax.swing.JFrame {
      */
     public User() {
         initComponents();
+    }
+    
+    Connection conn;
+    PreparedStatement prepSts;
+    
+    public void connect(){
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            conn=DriverManager.getConnection(
+                    "jdbc:mysql://localhost/my_hospital", "osagie", "erhabor");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, ex.getMessage());
+        } catch (SQLException ex) {
+            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, ex.getMessage());
+        }
     }
 
     /**
@@ -34,10 +59,10 @@ public class User extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        name = new javax.swing.JTextField();
-        username = new javax.swing.JTextField();
-        password = new javax.swing.JPasswordField();
-        role = new javax.swing.JComboBox();
+        nameField = new javax.swing.JTextField();
+        usernameField = new javax.swing.JTextField();
+        passwordField = new javax.swing.JPasswordField();
+        roleField = new javax.swing.JComboBox();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
 
@@ -65,13 +90,7 @@ public class User extends javax.swing.JFrame {
         jLabel8.setForeground(new java.awt.Color(255, 255, 255));
         jLabel8.setText("User Form");
 
-        name.setText("jTextField1");
-
-        username.setText("jTextField1");
-
-        password.setText("jPasswordField1");
-
-        role.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Patient", "Doctor", "Pharmacy", "Nurse" }));
+        roleField.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Patient", "Doctor", "Pharmacy", "Nurse" }));
 
         jButton1.setText("Cancel");
 
@@ -97,21 +116,21 @@ public class User extends javax.swing.JFrame {
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(40, 40, 40)
-                                .addComponent(name, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                 .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
                                     .addComponent(jLabel6)
                                     .addGap(18, 18, 18)
-                                    .addComponent(username, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(usernameField, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
                                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(jLabel3))
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(password)
+                                        .addComponent(passwordField)
                                         .addGroup(jPanel2Layout.createSequentialGroup()
-                                            .addComponent(role, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(roleField, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addGap(0, 0, Short.MAX_VALUE))))))))
                 .addContainerGap(47, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
@@ -129,19 +148,19 @@ public class User extends javax.swing.JFrame {
                 .addGap(28, 28, 28)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(name, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(nameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(26, 26, 26)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
-                    .addComponent(username, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(usernameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(26, 26, 26)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
-                    .addComponent(password, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(passwordField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(33, 33, 33)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(role, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(roleField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -171,7 +190,27 @@ public class User extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+        
+        String name = nameField.getText();
+        String password = passwordField.getPassword().toString();
+        String role = roleField.getSelectedItem().toString();
+        String username = usernameField.getText();
+        
+        try {
+            prepSts=conn.prepareStatement(
+                    "insert into user(name, username, password, role) "
+                            + "values(?,?,?,?)");
+            prepSts.setString(1,name);
+            prepSts.setString(2,username);
+            prepSts.setString(3,password);
+            prepSts.setString(4,role);
+            prepSts.executeUpdate();
+            
+            JOptionPane.showMessageDialog(this, "User inserted");
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
+            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
@@ -219,9 +258,9 @@ public class User extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JTextField name;
-    private javax.swing.JPasswordField password;
-    private javax.swing.JComboBox role;
-    private javax.swing.JTextField username;
+    private javax.swing.JTextField nameField;
+    private javax.swing.JPasswordField passwordField;
+    private javax.swing.JComboBox roleField;
+    private javax.swing.JTextField usernameField;
     // End of variables declaration//GEN-END:variables
 }
