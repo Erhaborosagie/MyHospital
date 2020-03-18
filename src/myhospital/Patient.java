@@ -205,6 +205,11 @@ public class Patient extends javax.swing.JFrame {
                 return types [columnIndex];
             }
         });
+        pTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                pTableMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(pTable);
 
         addButton.setText("Add");
@@ -215,8 +220,18 @@ public class Patient extends javax.swing.JFrame {
         });
 
         updateButton.setText("Update");
+        updateButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updateButtonActionPerformed(evt);
+            }
+        });
 
         deleteButton.setText("Delete");
+        deleteButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteButtonActionPerformed(evt);
+            }
+        });
 
         exitButton.setText("Exit");
 
@@ -326,6 +341,69 @@ public class Patient extends javax.swing.JFrame {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_addButtonActionPerformed
+
+    private void pTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pTableMouseClicked
+        DefaultTableModel dtm = (DefaultTableModel)pTable.getModel();
+        int selectedRow = pTable.getSelectedRow();
+        regNumField.setText(dtm.getValueAt(selectedRow, 0).toString());
+        nameField.setText(dtm.getValueAt(selectedRow, 1).toString());
+        phoneField.setText(dtm.getValueAt(selectedRow, 2).toString());
+        addressField.setText(dtm.getValueAt(selectedRow, 3).toString());
+        addButton.setEnabled(false);
+    }//GEN-LAST:event_pTableMouseClicked
+
+    private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
+        if(addButton.isEnabled())return;
+        String regNum = regNumField.getText();
+        String name = nameField.getText();
+        String phone = phoneField.getText();
+        String address = addressField.getText();
+        if(name == null || name.isEmpty() || phone == null || phone.isEmpty() ||
+                address == null || address.isEmpty()){
+            JOptionPane.showMessageDialog(this, "Please enter all details");
+            return;
+        }
+        try{
+            prepSts=conn.prepareStatement("UPDATE patients SET name=?, phone=?,"
+                    + " address=? WHERE reg_num=?");
+            prepSts.setString(1,name);
+            prepSts.setString(2,phone);
+            prepSts.setString(4,regNum);
+            prepSts.setString(3,address);
+            prepSts.executeUpdate();
+            
+            JOptionPane.showMessageDialog(
+                    this, "Patient " + regNumField.getText() + " updated");
+            autoId();
+            populatepTable();
+            
+            nameField.setText("");
+            phoneField.setText("");
+            addressField.setText("");
+            addButton.setEnabled(true);
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_updateButtonActionPerformed
+
+    private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
+        if(addButton.isEnabled())return;
+        String regNum = regNumField.getText();
+        try{
+            prepSts=conn.prepareStatement("DELETE FROM patients WHERE reg_num=?");
+            prepSts.setString(1,regNum);
+            prepSts.executeUpdate();
+            autoId();
+            populatepTable();
+            addButton.setEnabled(true);
+            nameField.setText("");
+            phoneField.setText("");
+            addressField.setText("");
+        } catch (SQLException ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_deleteButtonActionPerformed
 
     /**
      * @param args the command line arguments
