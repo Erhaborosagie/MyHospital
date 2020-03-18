@@ -5,6 +5,15 @@
  */
 package myhospital;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import myhospital.util.Connect;
+
 /**
  *
  * @author Dell
@@ -17,6 +26,10 @@ public class Patient extends javax.swing.JFrame {
     public Patient() {
         initComponents();
     }
+    
+    Connection conn;
+    PreparedStatement prepSts;
+    ResultSet resultSet;
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -231,7 +244,36 @@ public class Patient extends javax.swing.JFrame {
     }//GEN-LAST:event_nameFieldActionPerformed
 
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
-        // TODO add your handling code here:
+        String name = nameField.getText();
+        String phone = phoneField.getText();
+        String address = addressField.getText();
+        if(name == null || name.isEmpty() || phone == null || phone.isEmpty() ||
+                address == null || address.isEmpty()){
+            JOptionPane.showMessageDialog(this, "Please enter all details");
+            return;
+        }
+        conn = new Connect().connect();
+        try{
+            prepSts=conn.prepareStatement("SELECT * FROM user WHERE "
+                    + "username=? AND password=?");
+            prepSts.setString(1,name);
+            prepSts.setString(2,phone);
+            prepSts.setString(3,address);
+            prepSts.executeQuery();
+            
+            resultSet = prepSts.executeQuery();
+            if(resultSet.next()){
+                int userId= resultSet.getInt("id");
+                String userRole= resultSet.getString("role");
+                this.setVisible(false);
+            }else{
+                JOptionPane.showMessageDialog(this, "Invalid login details");
+                nameField.setText("");
+                phoneField.setText("");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_addButtonActionPerformed
 
     /**

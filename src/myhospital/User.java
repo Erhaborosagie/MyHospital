@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import myhospital.util.Connect;
 
 
 /**
@@ -30,22 +31,6 @@ public class User extends javax.swing.JFrame {
     
     Connection conn;
     PreparedStatement prepSts;
-    
-    public void connect(){
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            conn=DriverManager.getConnection(
-                    "jdbc:mysql://localhost/my_hospital?useUnicode=true"
-                            + "&useJDBCCompliantTimezoneShift=true&"
-                            + "useLegacyDatetimeCode=false&serverTimezone=UTC",
-                    "osagie", "erhabor");
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, "Blessing is a girl");
-        }
-    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -208,7 +193,7 @@ public class User extends javax.swing.JFrame {
                 username == null || username.isEmpty()){
             return;
         }
-        connect();
+        conn = new Connect().connect();
         
         try {
             prepSts=conn.prepareStatement(
