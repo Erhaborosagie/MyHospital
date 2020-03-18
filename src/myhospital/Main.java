@@ -18,6 +18,18 @@ public class Main extends javax.swing.JFrame {
         initComponents();
     }
 
+    int id;
+    String username;
+    String userRole;
+    Main(int id, String username, String userRole) {
+        initComponents();
+        this.id=id;
+        this.username=username;
+        this.userRole=userRole;
+        jLabel4.setText(username);
+        jLabel5.setText(userRole);
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
