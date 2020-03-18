@@ -8,10 +8,14 @@ package myhospital;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import myhospital.util.Connect;
 
 /**
@@ -25,11 +29,59 @@ public class Patient extends javax.swing.JFrame {
      */
     public Patient() {
         initComponents();
+        conn = new Connect().connect();
+        autoId();
+        populatepTable();
     }
     
     Connection conn;
     PreparedStatement prepSts;
     ResultSet resultSet;
+    
+    public void autoId(){
+        try {
+            Statement s = conn.createStatement();
+            resultSet=s.executeQuery("SELECT max(reg_num) FROM patients");
+            resultSet.next();
+            String maxReg = resultSet.getString("max(reg_num)");
+            if(maxReg == null){
+                regNumField.setText("p000001");
+            }else{
+                long id = Long.parseLong(maxReg.substring(2, maxReg.length()));
+                id++;
+                String regNum = String.format("P%06d", id);
+                regNumField.setText(regNum);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Patient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    public void populatepTable(){
+        
+        try {
+            prepSts=conn.prepareStatement("SELECT * FROM patients");
+            resultSet = prepSts.executeQuery();
+            
+            ResultSetMetaData rsmd = prepSts.getMetaData();
+            int cols = rsmd.getColumnCount();
+            DefaultTableModel dtm = (DefaultTableModel)pTable.getModel();
+            dtm.setRowCount(0);
+            
+            while(resultSet.next()){
+                Vector vector = new Vector();
+                
+                for(int i =1; i<cols; i++){
+                    vector.add(resultSet.getString("reg_num"));
+                    vector.add(resultSet.getString("name"));
+                    vector.add(resultSet.getString("phone"));
+                    vector.add(resultSet.getString("address"));
+                }
+                dtm.addRow(vector);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -51,7 +103,7 @@ public class Patient extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         regNumField = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        pTable = new javax.swing.JTable();
         addButton = new javax.swing.JButton();
         updateButton = new javax.swing.JButton();
         deleteButton = new javax.swing.JButton();
@@ -137,7 +189,7 @@ public class Patient extends javax.swing.JFrame {
                 .addContainerGap(58, Short.MAX_VALUE))
         );
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        pTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -153,7 +205,7 @@ public class Patient extends javax.swing.JFrame {
                 return types [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(pTable);
 
         addButton.setText("Add");
         addButton.addActionListener(new java.awt.event.ActionListener() {
@@ -190,32 +242,32 @@ public class Patient extends javax.swing.JFrame {
                                 .addComponent(deleteButton)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(exitButton)))
-                        .addGap(30, 30, 30)
+                        .addGap(31, 31, 31)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(304, 304, 304)
                         .addComponent(jLabel4)))
-                .addContainerGap(45, Short.MAX_VALUE))
+                .addContainerGap(44, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap(25, Short.MAX_VALUE)
                 .addComponent(jLabel4)
-                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(49, 49, 49)
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(46, 46, 46)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(addButton)
                             .addComponent(updateButton)
                             .addComponent(deleteButton)
-                            .addComponent(exitButton))
-                        .addGap(31, 31, 31))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 364, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())))
+                            .addComponent(exitButton)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 364, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -244,6 +296,7 @@ public class Patient extends javax.swing.JFrame {
     }//GEN-LAST:event_nameFieldActionPerformed
 
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
+        String regNum = regNumField.getText();
         String name = nameField.getText();
         String phone = phoneField.getText();
         String address = addressField.getText();
@@ -252,25 +305,23 @@ public class Patient extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Please enter all details");
             return;
         }
-        conn = new Connect().connect();
         try{
-            prepSts=conn.prepareStatement("SELECT * FROM user WHERE "
-                    + "username=? AND password=?");
+            prepSts=conn.prepareStatement("insert into patients"
+                    + "(name, phone, reg_num, address) values(?,?,?,?)");
             prepSts.setString(1,name);
             prepSts.setString(2,phone);
-            prepSts.setString(3,address);
-            prepSts.executeQuery();
+            prepSts.setString(3,regNum);
+            prepSts.setString(4,address);
+            prepSts.executeUpdate();
             
-            resultSet = prepSts.executeQuery();
-            if(resultSet.next()){
-                int userId= resultSet.getInt("id");
-                String userRole= resultSet.getString("role");
-                this.setVisible(false);
-            }else{
-                JOptionPane.showMessageDialog(this, "Invalid login details");
-                nameField.setText("");
-                phoneField.setText("");
-            }
+            JOptionPane.showMessageDialog(this, "Patient added");
+            autoId();
+            populatepTable();
+            
+            nameField.setText("");
+            phoneField.setText("");
+            addressField.setText("");
+            
         } catch (SQLException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -324,8 +375,8 @@ public class Patient extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextField nameField;
+    private javax.swing.JTable pTable;
     private javax.swing.JTextField phoneField;
     private javax.swing.JLabel regNumField;
     private javax.swing.JButton updateButton;
